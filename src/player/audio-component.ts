@@ -639,7 +639,7 @@ export class MagazineAudioPlayer extends HTMLElement {
                     const channels = p.color.match(/[\d.]+/g)?.slice(0, 3).map(Number) || [197, 160, 40];
                     const brightness = Math.max(...channels);
                     const gain = brightness > 0 ? Math.max(1, 230 / brightness) : 1;
-                    const lit = channels.map(channel => Math.min(255, Math.round(channel * gain)));
+                    const lit = channels.map((channel: number) => Math.min(255, Math.round(channel * gain)));
                     const tint = (alpha: number) => `rgba(${lit[0]},${lit[1]},${lit[2]},${alpha})`;
                     gradient.addColorStop(0, tint(1));
                     gradient.addColorStop(0.45, tint(1));
