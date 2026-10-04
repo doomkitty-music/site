@@ -412,8 +412,13 @@ export class MagazineAudioPlayer extends HTMLElement {
                 return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
             };
 
-            const ftLarge = formatTime(current).split(':').join(' : ');
-            if (timeDisplayLarge) timeDisplayLarge.textContent = ftLarge;
+            const remaining = Number.isFinite(duration) && duration > 0 ? Math.max(0, Math.ceil(duration - current)) : 0;
+            const ftLarge = formatTime(remaining).split(':').join(' : ');
+            if (timeDisplayLarge) {
+                timeDisplayLarge.textContent = ftLarge;
+                timeDisplayLarge.setAttribute('aria-label', `${formatTime(remaining)} remaining`);
+                timeDisplayLarge.setAttribute('title', 'Time remaining');
+            }
             if (timeProgress) timeProgress.textContent = `${formatTime(current)} / ${formatTime(duration)}`;
             
             updatePlayIcons();
