@@ -1,5 +1,10 @@
 # Doom Kitty
 
+Canonical repository: https://github.com/doomkitty-music/site
+Live site: https://doomkitty-music.github.io/site/
+
+All future development and deployment uses this repository. It contains its own source, media, fonts, and logo and does not depend on the previous site repository.
+
 Artist SPA adapted from sjefvanleeuwen/landing. Includes its full SCSS design system, custom navigation/footer, scroll reveals, dynamic artwork theme, MagazineAudioPlayer, global AudioService, and mini-player. The entry dialog starts sound from one explicit visitor gesture.
 
 Home uses a shuffled, preloaded two-video crossfade with Tikki-Tik, Likkie-Likkie playing independently. Clips are background material only; there are no video listings or direct video links. Music opens an editorial song page adapted from the original Solitude Machine layout. All views share the audio service and preserve playback on navigation/scroll. Audio loops on the opening.
