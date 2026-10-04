@@ -618,6 +618,8 @@ export class MagazineAudioPlayer extends HTMLElement {
                 }
             }
 
+            this.ctx.save();
+            this.ctx.globalCompositeOperation = 'lighter';
             this.particles.forEach((p, index) => {
                 p.x += p.vx;
                 p.y += p.vy;
@@ -633,10 +635,13 @@ export class MagazineAudioPlayer extends HTMLElement {
                     glow.width = glow.height = 24;
                     const glowCtx = glow.getContext('2d')!;
                     const gradient = glowCtx.createRadialGradient(12, 12, 0, 12, 12, 12);
-                    gradient.addColorStop(0, 'rgba(255,255,255,0.95)');
-                    gradient.addColorStop(0.12, 'rgba(255,255,255,0.8)');
-                    gradient.addColorStop(0.3, p.color);
-                    gradient.addColorStop(1, 'rgba(0,0,0,0)');
+                    // Use the particle hue throughout; transparent edges retain that hue.
+                    const channels = p.color.match(/[\d.]+/g)?.slice(0, 3).map(Number) || [197, 160, 40];
+                    const tint = (alpha: number) => `rgba(${channels[0]},${channels[1]},${channels[2]},${alpha})`;
+                    gradient.addColorStop(0, tint(1));
+                    gradient.addColorStop(0.18, tint(0.95));
+                    gradient.addColorStop(0.5, tint(0.45));
+                    gradient.addColorStop(1, tint(0));
                     glowCtx.fillStyle = gradient;
                     glowCtx.fillRect(0, 0, 24, 24);
                     if (particleGlows.size >= 32) particleGlows.clear();
@@ -646,6 +651,7 @@ export class MagazineAudioPlayer extends HTMLElement {
                 this.ctx!.globalAlpha = p.life * 0.85;
                 this.ctx!.drawImage(glow, p.x - glowSize / 2, p.y - glowSize / 2, glowSize, glowSize);
             });
+            this.ctx.restore();
             this.ctx.globalAlpha = 1.0;
             this.animationId = requestAnimationFrame(draw);
         };
