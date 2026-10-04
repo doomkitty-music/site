@@ -77,7 +77,7 @@ enterButton.addEventListener('click',()=>{
  const entrance=document.querySelector<HTMLElement>('#entrance')!;
  entrance.classList.add('entering');
  enterButton.disabled=true;
- window.setTimeout(()=>{entrance.hidden=true;},matchMedia('(prefers-reduced-motion: reduce)').matches?0:550);
+ window.setTimeout(()=>{entrance.hidden=true;},matchMedia('(prefers-reduced-motion: reduce)').matches?0:1000);
  playback.catch(()=>{error.textContent='Tap the player’s play button to retry.';});
  document.querySelector<HTMLButtonElement>('.home-player .play-pause-btn')?.focus({preventScroll:true});
 });
