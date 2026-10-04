@@ -172,3 +172,37 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
 
 /* Opening films run automatically; keep navigation free of film controls. */
 .home-player .opening-controls { display:none !important; }
+
+/* Enter through the kitty: eye-centered rush, then reveal the playing site. */
+#entrance.entering { animation:kitty-entrance-reveal 1s ease-in forwards; }
+#entrance.entering .animated-logo {
+ transform-origin:50% 33.6%;
+ animation:kitty-rush 1s cubic-bezier(.65,0,.85,.45) forwards;
+ will-change:transform,opacity;
+}
+#entrance.entering .logo-eyes { animation:kitty-eye-ignite 1s ease-out forwards; }
+#entrance.entering .entrance-kicker,
+#entrance.entering .entrance-content>p,
+#entrance.entering #enter-site,
+#entrance.entering #entrance-status,
+#entrance.entering .entrance-bottom,
+#entrance.entering .orbit-ring { transition:opacity .18s; opacity:0; }
+@keyframes kitty-rush {
+ 0% { transform:scale(1); opacity:1; }
+ 20% { transform:scale(1.12); opacity:1; }
+ 75% { opacity:1; }
+ 100% { transform:scale(9); opacity:0; }
+}
+@keyframes kitty-eye-ignite {
+ 0% { transform:scaleY(1); filter:drop-shadow(0 0 4px #fff); }
+ 35%,70% { transform:scaleY(1); filter:drop-shadow(0 0 30px #ffe3a3) drop-shadow(0 0 12px #fff); }
+ 100% { transform:scaleY(1); filter:drop-shadow(0 0 45px #ffe3a3); }
+}
+@keyframes kitty-entrance-reveal {
+ 0%,60% { opacity:1; }
+ 100% { opacity:0; visibility:hidden; }
+}
+@media(prefers-reduced-motion:reduce) {
+ #entrance.entering,#entrance.entering .animated-logo,#entrance.entering .logo-eyes { animation:none; }
+ #entrance.entering { opacity:0; visibility:hidden; }
+}
