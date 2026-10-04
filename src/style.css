@@ -169,3 +169,6 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
  .mini-player.global-mini .mini-play-btn { width:44px; height:44px; flex:none; }
  .mini-player.global-mini .mini-progress-container { height:4px; }
 }
+
+/* Opening films run automatically; keep navigation free of film controls. */
+.home-player .opening-controls { display:none !important; }
