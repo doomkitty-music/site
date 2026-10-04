@@ -637,17 +637,20 @@ export class MagazineAudioPlayer extends HTMLElement {
                     const gradient = glowCtx.createRadialGradient(12, 12, 0, 12, 12, 12);
                     // Use the particle hue throughout; transparent edges retain that hue.
                     const channels = p.color.match(/[\d.]+/g)?.slice(0, 3).map(Number) || [197, 160, 40];
-                    const tint = (alpha: number) => `rgba(${channels[0]},${channels[1]},${channels[2]},${alpha})`;
+                    const brightness = Math.max(...channels);
+                    const gain = brightness > 0 ? Math.max(1, 230 / brightness) : 1;
+                    const lit = channels.map(channel => Math.min(255, Math.round(channel * gain)));
+                    const tint = (alpha: number) => `rgba(${lit[0]},${lit[1]},${lit[2]},${alpha})`;
                     gradient.addColorStop(0, tint(1));
-                    gradient.addColorStop(0.18, tint(0.95));
-                    gradient.addColorStop(0.5, tint(0.45));
+                    gradient.addColorStop(0.45, tint(1));
+                    gradient.addColorStop(0.7, tint(0.18));
                     gradient.addColorStop(1, tint(0));
                     glowCtx.fillStyle = gradient;
                     glowCtx.fillRect(0, 0, 24, 24);
                     if (particleGlows.size >= 32) particleGlows.clear();
                     particleGlows.set(p.color, glow);
                 }
-                const glowSize = 7 + p.size * 5;
+                const glowSize = 2 + p.size;
                 this.ctx!.globalAlpha = p.life * 0.85;
                 this.ctx!.drawImage(glow, p.x - glowSize / 2, p.y - glowSize / 2, glowSize, glowSize);
             });
