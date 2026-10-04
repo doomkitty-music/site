@@ -2,6 +2,7 @@ name: Migrate Doom Kitty site
 on:
   push:
     branches: [main]
+    paths: ['.github/workflows/migrate.yml']
   workflow_dispatch:
 permissions:
   contents: write
@@ -19,6 +20,7 @@ jobs:
           git remote add migration-source https://github.com/sjefvanleeuwen/doom-kitty.git
           git fetch migration-source main
           git read-tree migration-source/main
+          git restore --source=HEAD --staged --worktree .github
           git checkout-index -a -f
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
