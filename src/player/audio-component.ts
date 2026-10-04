@@ -442,6 +442,7 @@ export class MagazineAudioPlayer extends HTMLElement {
         window.addEventListener('resize', resize, {signal:this.globalListeners.signal});
         resize();
 
+        const particleGlows = new Map<string, HTMLCanvasElement>();
         let lastDraw = 0;
         const mobileRendering = window.matchMedia('(pointer:coarse)');
         const draw = (timestamp: number) => {
@@ -626,11 +627,24 @@ export class MagazineAudioPlayer extends HTMLElement {
                     this.particles.splice(index, 1);
                     return;
                 }
-                this.ctx!.fillStyle = p.color;
-                this.ctx!.globalAlpha = p.life * 0.8;
-                this.ctx!.beginPath();
-                this.ctx!.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                this.ctx!.fill();
+                let glow = particleGlows.get(p.color);
+                if (!glow) {
+                    glow = document.createElement('canvas');
+                    glow.width = glow.height = 24;
+                    const glowCtx = glow.getContext('2d')!;
+                    const gradient = glowCtx.createRadialGradient(12, 12, 0, 12, 12, 12);
+                    gradient.addColorStop(0, 'rgba(255,255,255,0.95)');
+                    gradient.addColorStop(0.12, 'rgba(255,255,255,0.8)');
+                    gradient.addColorStop(0.3, p.color);
+                    gradient.addColorStop(1, 'rgba(0,0,0,0)');
+                    glowCtx.fillStyle = gradient;
+                    glowCtx.fillRect(0, 0, 24, 24);
+                    if (particleGlows.size >= 32) particleGlows.clear();
+                    particleGlows.set(p.color, glow);
+                }
+                const glowSize = 7 + p.size * 5;
+                this.ctx!.globalAlpha = p.life * 0.85;
+                this.ctx!.drawImage(glow, p.x - glowSize / 2, p.y - glowSize / 2, glowSize, glowSize);
             });
             this.ctx.globalAlpha = 1.0;
             this.animationId = requestAnimationFrame(draw);
