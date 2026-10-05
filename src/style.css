@@ -288,3 +288,36 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
   transform:none !important;
  }
 }
+
+/* Longer volume control with a generous touch target in every layout. */
+.home-player .volume-container,
+m-audio-player .volume-container { flex-shrink:0; gap:6px !important; }
+m-audio-player .volume-slider {
+ width:clamp(100px,12vw,160px) !important;
+ height:24px !important;
+ opacity:1 !important;
+ border-radius:0 !important;
+ background-size:100% 4px !important;
+ background-position:center !important;
+ background-repeat:no-repeat !important;
+}
+m-audio-player .volume-slider::-webkit-slider-thumb {
+ -webkit-appearance:none;
+ width:14px; height:14px; border-radius:50%;
+ background:#e7e1d4; border:1px solid #ffffff88;
+ box-shadow:0 0 6px #ffffff22;
+}
+m-audio-player .volume-slider::-moz-range-thumb {
+ width:14px; height:14px; border-radius:50%;
+ background:#e7e1d4; border:1px solid #ffffff88;
+}
+@media (max-aspect-ratio:3/2) {
+ .home-player .volume-slider { width:clamp(90px,20vw,170px) !important; }
+ .home-player .controls-left { flex:1; min-width:0; }
+}
+@media (max-width:480px) {
+ m-audio-player .volume-slider { width:clamp(84px,24vw,116px) !important; }
+ m-audio-player .controls-left { gap:4px !important; }
+ m-audio-player .controls-right { gap:4px !important; }
+ m-audio-player .time-progress { font-size:8px !important; letter-spacing:0 !important; }
+}
