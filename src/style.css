@@ -252,3 +252,17 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
  .home-player .volume-slider { width:25px !important; }
  .home-player .player-controls-bar { padding-inline:8px !important; }
 }
+
+/* Analyzer overlays the lower player region without consuming layout space. */
+@media (max-aspect-ratio:3/2) {
+ .home-player canvas#visualizer {
+  top:56.25vw !important;
+  height:calc(100% - 56.25vw) !important;
+  min-height:120px;
+  z-index:5 !important;
+  pointer-events:none !important;
+ }
+ .home-player .player-content-wrapper { z-index:10 !important; }
+ .home-player .player-controls-bar,
+ .home-player .progress-bar-container { z-index:150 !important; }
+}
