@@ -482,9 +482,10 @@ export class MagazineAudioPlayer extends HTMLElement {
             const actualBarCount = Math.min(barCount, Math.floor(totalWidth / (barWidth + spacing))) - 8;
             const startX = (totalWidth - (actualBarCount * (barWidth + spacing))) / 2;
             
-            let centerY = canvas.height * 0.55;
-            if (this.vizMode === 'lower') centerY = canvas.height * 0.45;
-            else if (this.vizMode === 'upper') centerY = canvas.height * 0.65;
+            const framedPlayer = this.closest('.home-player') && window.matchMedia('(max-aspect-ratio:3/2)').matches;
+            let centerY = canvas.height * (framedPlayer ? 0.5 : 0.55);
+            if (!framedPlayer && this.vizMode === 'lower') centerY = canvas.height * 0.45;
+            else if (!framedPlayer && this.vizMode === 'upper') centerY = canvas.height * 0.65;
 
             this.ctx.strokeStyle = colorPrimary.replace('rgb', 'rgba').replace(')', ', 0.2)');
             this.ctx.lineWidth = 1;
