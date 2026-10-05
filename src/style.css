@@ -339,3 +339,24 @@ m-audio-player .volume-slider::-moz-range-thumb {
   transform:none !important;
  }
 }
+
+/* Keep seek and transport together at the bottom of the framed player. */
+@media (max-aspect-ratio:3/2) {
+ .home-player { --transport-height:44px; --transport-bottom:max(8px,env(safe-area-inset-bottom)); }
+ .home-player .audio-player-hero { padding-bottom:calc(var(--transport-height) + var(--transport-bottom) + 28px) !important; }
+ .home-player .player-controls-bar {
+  position:absolute !important;
+  bottom:var(--transport-bottom) !important;
+  left:0 !important;
+  min-height:var(--transport-height);
+ }
+ .home-player .progress-bar-container {
+  position:absolute !important;
+  bottom:calc(var(--transport-bottom) + var(--transport-height) + 12px) !important;
+  left:0 !important;
+  margin:0 !important;
+ }
+}
+@media (max-aspect-ratio:3/2) and (max-width:420px) {
+ .home-player { --transport-height:66px; }
+}
