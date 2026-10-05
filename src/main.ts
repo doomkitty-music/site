@@ -100,7 +100,7 @@ ambientCanvas.width=64;ambientCanvas.height=36;
 ambientCanvas.setAttribute('aria-hidden','true');
 document.querySelector('.home-player')?.prepend(ambientCanvas);
 const ambientContext=ambientCanvas.getContext('2d');
-const portrait=matchMedia('(max-width: 900px) and (orientation: portrait)');
+const portrait=matchMedia('(max-aspect-ratio: 3/2)');
 function sampleAmbilight(){
  if(ambientContext&&portrait.matches&&!document.hidden&&!document.querySelector('[data-view="home"]')?.hasAttribute('hidden')){
   const home=document.querySelector('.home-player')?.getBoundingClientRect();
