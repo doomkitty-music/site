@@ -48,7 +48,7 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
 @media(prefers-reduced-motion:reduce){.logo-cat,.logo-tail,.logo-eyes,.logo-type,#entrance.entering,#entrance.entering .logo-eyes{animation:none}#entrance.entering{opacity:0;visibility:hidden}}
 
 /* Portrait phones keep the complete film; landscape returns to the immersive hero. */
-@media (max-width: 900px) and (orientation: portrait) {
+@media (max-aspect-ratio: 3/2) {
   .home-player .audio-player-hero {
     height: auto !important;
     min-height: 0;
@@ -115,7 +115,7 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
 
 /* Video-derived ambilight and measured navigation clearance on portrait phones. */
 .video-ambilight { display:none; }
-@media (max-width:900px) and (orientation:portrait) {
+@media (max-aspect-ratio:3/2) {
  .home-player { isolation:isolate; overflow:hidden; padding-top:var(--navigation-height,90px); background:#050505; }
  .home-player .video-ambilight { display:block; position:absolute; inset:-40px; width:calc(100% + 80px); height:calc(100% + 80px); filter:blur(45px) saturate(1.3); opacity:.5; z-index:-1; pointer-events:none; }
  .home-player .audio-player-hero { padding:32px 0 max(24px,env(safe-area-inset-bottom)); background:transparent; overflow:visible !important; min-height:0; }
@@ -132,7 +132,7 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
 }
 
 /* Let the sampled video glow show through the player's inline black background. */
-@media (max-width:900px) and (orientation:portrait) {
+@media (max-aspect-ratio:3/2) {
  .home-player .audio-player-hero { background:transparent !important; }
  .home-player .video-ambilight { opacity:.65; }
  .home-player .hero-overlay,
@@ -141,7 +141,7 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
 }
 
 /* Give the portrait analyzer a generous stage without stretching its drawing. */
-@media (max-width:900px) and (orientation:portrait) {
+@media (max-aspect-ratio:3/2) {
  .home-player { --mobile-analyzer-height:100px; }
  .home-player .visualizer-placeholder { height:var(--mobile-analyzer-height) !important; }
  .home-player canvas#visualizer { height:var(--mobile-analyzer-height) !important; }
@@ -205,4 +205,15 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
 @media(prefers-reduced-motion:reduce) {
  #entrance.entering,#entrance.entering .animated-logo,#entrance.entering .logo-eyes { animation:none; }
  #entrance.entering { opacity:0; visibility:hidden; }
+}
+
+/* Frame the complete film on square tablets/foldables; reserve room for playback. */
+@media (max-aspect-ratio:3/2) {
+ .home-player { --framed-video-height:min(56.25vw, max(120px, calc(100svh - var(--navigation-height,90px) - 260px))); }
+ .home-player .hero-image { height:var(--framed-video-height) !important; aspect-ratio:auto; }
+ .home-player .video-stage video { object-fit:contain; object-position:center; }
+ .home-player canvas#visualizer { top:calc(32px + var(--framed-video-height) + 82px) !important; }
+ .home-player .player-content-wrapper { width:calc(100% - 48px) !important; }
+ .home-player .top-info { grid-template-columns:minmax(0,1fr) auto !important; }
+ .home-player .video-ambilight { opacity:.65; }
 }
