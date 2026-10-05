@@ -277,3 +277,14 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
   transform:translateY(-50%);
  }
 }
+
+/* Responsive spectrum rises from just above the seek bar. */
+@media (max-aspect-ratio:3/2) {
+ .home-player canvas#visualizer {
+  top:56.25vw !important;
+  bottom:auto !important;
+  height:calc(100% - 56.25vw) !important;
+  min-height:0;
+  transform:none !important;
+ }
+}
