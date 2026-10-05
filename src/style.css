@@ -366,7 +366,7 @@ m-audio-player .volume-slider::-moz-range-thumb {
 @media (max-aspect-ratio:3/2) {
  .home-player {
   --player-room:max(180px,calc(var(--visible-viewport-height,100svh) - var(--navigation-height,90px)));
-  --framed-video-height:min(56.25vw, max(0px,calc(var(--player-room) - var(--transport-height,44px) - 100px)));
+  --framed-video-height:min(56.25vw, var(--player-room));
  }
  .home-player .audio-player-hero {
   height:var(--player-room) !important;
@@ -376,7 +376,7 @@ m-audio-player .volume-slider::-moz-range-thumb {
  .home-player .hero-image { height:var(--framed-video-height) !important; flex:none; }
  .home-player .player-content-wrapper {
   position:absolute !important;
-  top:calc(var(--framed-video-height) + 8px);
+  top:max(8px,min(calc(var(--framed-video-height) + 8px),calc(var(--player-room) - var(--transport-height,44px) - var(--transport-bottom,8px) - 90px)));
   left:24px;
   right:24px;
   width:auto !important;
@@ -391,4 +391,18 @@ m-audio-player .volume-slider::-moz-range-thumb {
  .home-player .player-controls-bar { bottom:var(--transport-bottom) !important; }
  .home-player .progress-bar-container { bottom:calc(var(--transport-bottom) + var(--transport-height) + 12px) !important; }
  .home-player canvas#visualizer { inset:0 !important; height:100% !important; }
+}
+
+/* Let the film use the available width; playback can overlay it in tight layouts. */
+@media (max-aspect-ratio:3/2) {
+ .home-player .overlay-gradient {
+  display:block;
+  pointer-events:none;
+  background:linear-gradient(transparent 40%,rgba(0,0,0,.12) 65%,rgba(0,0,0,.55));
+ }
+ .home-player .track-title,
+ .home-player .track-artist,
+ .home-player .time-display-large,
+ .home-player .time-progress { text-shadow:0 1px 5px #000,0 0 12px #0008 !important; }
+ .home-player .player-controls-bar button { filter:drop-shadow(0 1px 3px #0009); }
 }
