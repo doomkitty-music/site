@@ -499,16 +499,15 @@ export class MagazineAudioPlayer extends HTMLElement {
             this.ctx.stroke();
 
             const portraitHome = this.closest('.home-player') && window.matchMedia('(max-width:900px) and (orientation:portrait)').matches;
+            const filmBottom = this.querySelector('.hero-image')?.getBoundingClientRect().bottom ?? rect.top;
+            const framedSpectrumHeight = Math.min(180, Math.max(80, (seekSlider.getBoundingClientRect().top - filmBottom - 12) * 0.8));
             for (let i = 0; i < actualBarCount; i++) {
                 let targetH = 2; 
                 if (dataArray) {
                     const index = Math.floor(Math.pow(i / actualBarCount, 1.45) * (dataArray.length * 0.75));
                     const value = dataArray[index] || 0;
                     const hScale = portraitHome ? 0.4 : (spectrumMode === 'both' ? 0.15 : 0.25);
-                    const filmBottom = this.querySelector('.hero-image')?.getBoundingClientRect().bottom ?? rect.top;
-                    const spectrumHeight = framedPlayer
-                        ? Math.min(180, Math.max(80, (seekSlider.getBoundingClientRect().top - filmBottom - 12) * 0.8))
-                        : canvas.height * hScale;
+                    const spectrumHeight = framedPlayer ? framedSpectrumHeight : canvas.height * hScale;
                     targetH = (Math.pow(value / 255, 1.5)) * spectrumHeight;
                     if (targetH < 2) targetH = 2;
                     
