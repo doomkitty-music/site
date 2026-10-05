@@ -223,3 +223,32 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
 @media (max-aspect-ratio:3/2) {
  .home-player .hero-image { width:100% !important; max-width:none !important; margin-inline:0 !important; }
 }
+
+/* Fit the full player beneath navigation, keeping the film edge-to-edge. */
+@media (max-aspect-ratio:3/2) {
+ .home-player {
+  --player-room:calc(100svh - var(--navigation-height,90px));
+  --fit-analyzer-height:clamp(24px, calc(var(--player-room) - 56.25vw - 154px), 150px);
+ }
+ .home-player .audio-player-hero {
+  min-height:var(--player-room);
+  height:auto !important;
+  padding:0 0 max(8px,env(safe-area-inset-bottom)) !important;
+  justify-content:flex-start;
+ }
+ .home-player .player-content-wrapper { margin:12px auto 0 !important; flex:none; }
+ .home-player .top-info { margin-bottom:8px !important; gap:10px !important; }
+ .home-player .track-title { font-size:clamp(13px,2.6vw,18px) !important; }
+ .home-player .track-artist { margin-top:5px !important; }
+ .home-player .visualizer-placeholder { height:var(--fit-analyzer-height) !important; }
+ .home-player canvas#visualizer { top:calc(56.25vw + 70px) !important; height:var(--fit-analyzer-height) !important; }
+ .home-player .progress-bar-container { margin:8px 0 !important; }
+ .home-player .player-controls-bar { min-height:44px; }
+ .home-player .controls-left { flex-wrap:nowrap; }
+ .home-player .time-progress { flex-basis:auto; padding-left:4px; }
+ .home-player .play-pause-btn { width:44px; height:44px; }
+}
+@media (max-aspect-ratio:3/2) and (max-width:360px) {
+ .home-player .volume-slider { width:25px !important; }
+ .home-player .player-controls-bar { padding-inline:8px !important; }
+}
