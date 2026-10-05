@@ -321,3 +321,10 @@ m-audio-player .volume-slider::-moz-range-thumb {
  m-audio-player .controls-right { gap:4px !important; }
  m-audio-player .time-progress { font-size:8px !important; letter-spacing:0 !important; }
 }
+
+@media (max-width:420px) {
+ .home-player .controls-left { flex-wrap:wrap; }
+ .home-player .time-progress { flex-basis:100%; padding-left:10px; }
+ .home-player .controls-right { align-self:start; }
+ .home-player { --fit-analyzer-height:clamp(24px, calc(var(--player-room) - 56.25vw - 172px), 150px); }
+}
