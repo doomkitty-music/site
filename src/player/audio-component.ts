@@ -454,6 +454,7 @@ export class MagazineAudioPlayer extends HTMLElement {
             }
             const framedPlayer = Boolean(this.closest('.home-player')) && window.matchMedia('(max-aspect-ratio:3/2)').matches;
             const spectrumMode = framedPlayer ? 'upper' : this.vizMode;
+            resize();
             lastDraw = timestamp;
             this.ctx.clearRect(0, 0, canvas.width, canvas.height);
             
@@ -485,7 +486,7 @@ export class MagazineAudioPlayer extends HTMLElement {
             const startX = (totalWidth - (actualBarCount * (barWidth + spacing))) / 2;
             
             let centerY = framedPlayer
-                ? Math.max(8, Math.min(canvas.height - 8, seekSlider.getBoundingClientRect().top - rect.top - 12))
+                ? Math.max(8, Math.min(canvas.height - 8, (seekSlider.getBoundingClientRect().top - rect.top - 12) * canvas.height / Math.max(1, rect.height)))
                 : canvas.height * 0.55;
             if (!framedPlayer && spectrumMode === 'lower') centerY = canvas.height * 0.45;
             else if (!framedPlayer && spectrumMode === 'upper') centerY = canvas.height * 0.65;
@@ -504,7 +505,11 @@ export class MagazineAudioPlayer extends HTMLElement {
                     const index = Math.floor(Math.pow(i / actualBarCount, 1.45) * (dataArray.length * 0.75));
                     const value = dataArray[index] || 0;
                     const hScale = portraitHome ? 0.4 : (spectrumMode === 'both' ? 0.15 : 0.25);
-                    targetH = (Math.pow(value / 255, 1.5)) * (canvas.height * hScale);
+                    const filmBottom = this.querySelector('.hero-image')?.getBoundingClientRect().bottom ?? rect.top;
+                    const spectrumHeight = framedPlayer
+                        ? Math.min(180, Math.max(80, (seekSlider.getBoundingClientRect().top - filmBottom - 12) * 0.8))
+                        : canvas.height * hScale;
+                    targetH = (Math.pow(value / 255, 1.5)) * spectrumHeight;
                     if (targetH < 2) targetH = 2;
                     
                     if (targetH > this.bars[i]) {
