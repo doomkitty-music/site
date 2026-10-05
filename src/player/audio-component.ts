@@ -595,14 +595,17 @@ export class MagazineAudioPlayer extends HTMLElement {
                 this.ctx.fillRect(x, centerY - 1, barWidth, 2);
                 this.ctx.restore();
 
-                if (this.showParticles && dataArray && peakH > 5) {
-                    if (this.bars[i] > 30 && Math.random() > 0.98) {
+                if (this.showParticles && dataArray && !audioService.isPaused && this.particles.length < 80) {
+                    const particleBin = Math.floor(Math.pow(i / actualBarCount, 1.45) * (dataArray.length * 0.75));
+                    const signal = dataArray[particleBin] || 0;
+                    const emissionChance = 0.003 + 0.012 * Math.sqrt(signal / 255);
+                    if (signal > 2 && Math.random() < emissionChance) {
                         const particleY = spectrumMode === 'upper' ? centerY - currentH : centerY + currentH;
                         this.particles.push({
                             x: x + barWidth / 2,
                             y: particleY,
                             vx: (Math.random() - 0.5) * 0.4,
-                            vy: spectrumMode === 'upper' ? -0.2 - Math.random() : 0.2 + Math.random(), 
+                            vy: spectrumMode === 'upper' ? -0.45 - Math.random() * 0.65 : 0.45 + Math.random() * 0.65, 
                             size: Math.random() * 0.7 + 0.2,
                             life: 1.0,
                             color: grad[0]
@@ -629,7 +632,7 @@ export class MagazineAudioPlayer extends HTMLElement {
                 p.x += p.vx;
                 p.y += p.vy;
                 p.vy += (p.vy > 0) ? 0.015 : -0.005; 
-                p.life -= 0.003;
+                p.life -= 0.006;
                 if (p.life <= 0 || p.y > canvas.height + 20 || p.y < -20) {
                     this.particles.splice(index, 1);
                     return;
