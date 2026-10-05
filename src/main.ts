@@ -120,3 +120,10 @@ function sampleAmbilight(){
 }
 window.setInterval(sampleAmbilight,400);
 portrait.addEventListener('change',sampleAmbilight);
+
+function updateVisibleViewport(){
+ document.documentElement.style.setProperty('--visible-viewport-height', (window.visualViewport?.height || window.innerHeight)+'px');
+}
+window.addEventListener('resize',updateVisibleViewport,{passive:true});
+window.visualViewport?.addEventListener('resize',updateVisibleViewport,{passive:true});
+updateVisibleViewport();
