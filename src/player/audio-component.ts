@@ -452,6 +452,8 @@ export class MagazineAudioPlayer extends HTMLElement {
                 this.animationId = requestAnimationFrame(draw);
                 return;
             }
+            const framedPlayer = Boolean(this.closest('.home-player')) && window.matchMedia('(max-aspect-ratio:3/2)').matches;
+            const spectrumMode = framedPlayer ? 'upper' : this.vizMode;
             lastDraw = timestamp;
             this.ctx.clearRect(0, 0, canvas.width, canvas.height);
             
@@ -482,10 +484,11 @@ export class MagazineAudioPlayer extends HTMLElement {
             const actualBarCount = Math.min(barCount, Math.floor(totalWidth / (barWidth + spacing))) - 8;
             const startX = (totalWidth - (actualBarCount * (barWidth + spacing))) / 2;
             
-            const framedPlayer = this.closest('.home-player') && window.matchMedia('(max-aspect-ratio:3/2)').matches;
-            let centerY = canvas.height * (framedPlayer ? 0.5 : 0.55);
-            if (!framedPlayer && this.vizMode === 'lower') centerY = canvas.height * 0.45;
-            else if (!framedPlayer && this.vizMode === 'upper') centerY = canvas.height * 0.65;
+            let centerY = framedPlayer
+                ? Math.max(8, Math.min(canvas.height - 8, seekSlider.getBoundingClientRect().top - rect.top - 12))
+                : canvas.height * 0.55;
+            if (!framedPlayer && spectrumMode === 'lower') centerY = canvas.height * 0.45;
+            else if (!framedPlayer && spectrumMode === 'upper') centerY = canvas.height * 0.65;
 
             this.ctx.strokeStyle = colorPrimary.replace('rgb', 'rgba').replace(')', ', 0.2)');
             this.ctx.lineWidth = 1;
@@ -500,7 +503,7 @@ export class MagazineAudioPlayer extends HTMLElement {
                 if (dataArray) {
                     const index = Math.floor(Math.pow(i / actualBarCount, 1.45) * (dataArray.length * 0.75));
                     const value = dataArray[index] || 0;
-                    const hScale = portraitHome ? 0.4 : (this.vizMode === 'both' ? 0.15 : 0.25);
+                    const hScale = portraitHome ? 0.4 : (spectrumMode === 'both' ? 0.15 : 0.25);
                     targetH = (Math.pow(value / 255, 1.5)) * (canvas.height * hScale);
                     if (targetH < 2) targetH = 2;
                     
@@ -525,7 +528,7 @@ export class MagazineAudioPlayer extends HTMLElement {
                 const x = startX + i * (barWidth + spacing);
                 const grad = themeColors.gradPalette || [colorPrimary, colorSecondary, colorLight, colorSecondary, colorPrimary];
                 
-                if (this.vizMode === 'both') {
+                if (spectrumMode === 'both') {
                     const gradient = this.ctx.createLinearGradient(x, centerY - currentH, x, centerY + currentH);
                     gradient.addColorStop(0, 'rgba(0, 0, 0, 0.0)');
                     gradient.addColorStop(0.15, grad[4] || grad[0]);
@@ -547,7 +550,7 @@ export class MagazineAudioPlayer extends HTMLElement {
                         this.ctx.fillRect(x, centerY + peakH + 1, barWidth, 1.5);
                         this.ctx.restore();
                     }
-                } else if (this.vizMode === 'upper') {
+                } else if (spectrumMode === 'upper') {
                     const gradient = this.ctx.createLinearGradient(x, centerY - currentH, x, centerY);
                     gradient.addColorStop(0, 'rgba(0, 0, 0, 0.0)');
                     gradient.addColorStop(0.3, grad[2] || grad[0]);
@@ -565,7 +568,7 @@ export class MagazineAudioPlayer extends HTMLElement {
                         this.ctx.fillRect(x, centerY - peakH - 2, barWidth, 1.5);
                         this.ctx.restore();
                     }
-                } else if (this.vizMode === 'lower') {
+                } else if (spectrumMode === 'lower') {
                     const gradient = this.ctx.createLinearGradient(x, centerY, x, centerY + currentH);
                     gradient.addColorStop(0, grad[1] || grad[0]);
                     gradient.addColorStop(0.5, grad[0]);
@@ -594,12 +597,12 @@ export class MagazineAudioPlayer extends HTMLElement {
 
                 if (this.showParticles && dataArray && peakH > 5) {
                     if (this.bars[i] > 30 && Math.random() > 0.98) {
-                        const particleY = this.vizMode === 'upper' ? centerY - currentH : centerY + currentH;
+                        const particleY = spectrumMode === 'upper' ? centerY - currentH : centerY + currentH;
                         this.particles.push({
                             x: x + barWidth / 2,
                             y: particleY,
                             vx: (Math.random() - 0.5) * 0.4,
-                            vy: this.vizMode === 'upper' ? -0.2 - Math.random() : 0.2 + Math.random(), 
+                            vy: spectrumMode === 'upper' ? -0.2 - Math.random() : 0.2 + Math.random(), 
                             size: Math.random() * 0.7 + 0.2,
                             life: 1.0,
                             color: grad[0]
@@ -612,8 +615,8 @@ export class MagazineAudioPlayer extends HTMLElement {
                     this.ctx.shadowBlur = 20;
                     this.ctx.shadowColor = grad[1] || colorSecondary;
                     this.ctx.globalAlpha = Math.min(1, currentH / 60);
-                    const yStart = this.vizMode === 'lower' ? centerY : centerY - currentH;
-                    const yHeight = this.vizMode === 'both' ? currentH * 2 : currentH;
+                    const yStart = spectrumMode === 'lower' ? centerY : centerY - currentH;
+                    const yHeight = spectrumMode === 'both' ? currentH * 2 : currentH;
                     this.ctx.fillRect(x, yStart, barWidth, yHeight);
                     this.ctx.restore();
                 }
@@ -622,6 +625,7 @@ export class MagazineAudioPlayer extends HTMLElement {
             this.ctx.save();
             this.ctx.globalCompositeOperation = 'lighter';
             this.particles.forEach((p, index) => {
+                if (framedPlayer) p.vy = -Math.abs(p.vy);
                 p.x += p.vx;
                 p.y += p.vy;
                 p.vy += (p.vy > 0) ? 0.015 : -0.005; 
