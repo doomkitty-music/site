@@ -266,3 +266,14 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
  .home-player .player-controls-bar,
  .home-player .progress-bar-container { z-index:150 !important; }
 }
+
+/* Center the spectrum's baseline within the lower player region. */
+@media (max-aspect-ratio:3/2) {
+ .home-player canvas#visualizer {
+  --analyzer-region:calc(100% - 56.25vw);
+  top:calc(56.25vw + var(--analyzer-region) / 2) !important;
+  height:clamp(160px, var(--analyzer-region), 280px) !important;
+  min-height:0;
+  transform:translateY(-50%);
+ }
+}
