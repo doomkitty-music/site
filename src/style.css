@@ -360,3 +360,35 @@ m-audio-player .volume-slider::-moz-range-thumb {
 @media (max-aspect-ratio:3/2) and (max-width:420px) {
  .home-player { --transport-height:66px; }
 }
+
+/* Bound the player to the visible browser area, rather than its content height. */
+.home-player .audio-player-hero { min-height:0 !important; height:var(--visible-viewport-height,100svh) !important; }
+@media (max-aspect-ratio:3/2) {
+ .home-player {
+  --player-room:max(180px,calc(var(--visible-viewport-height,100svh) - var(--navigation-height,90px)));
+  --framed-video-height:min(56.25vw, max(0px,calc(var(--player-room) - var(--transport-height,44px) - 100px)));
+ }
+ .home-player .audio-player-hero {
+  height:var(--player-room) !important;
+  min-height:0 !important;
+  padding:0 !important;
+ }
+ .home-player .hero-image { height:var(--framed-video-height) !important; flex:none; }
+ .home-player .player-content-wrapper {
+  position:absolute !important;
+  top:calc(var(--framed-video-height) + 8px);
+  left:24px;
+  right:24px;
+  width:auto !important;
+  height:auto !important;
+  margin:0 !important;
+ }
+ .home-player .visualizer-placeholder { display:none; }
+ .home-player .top-info { margin:0 !important; }
+ .home-player .track-title { font-size:clamp(12px,2.5vw,17px) !important; line-height:1.3 !important; }
+ .home-player .track-artist { font-size:8px !important; margin-top:4px !important; }
+ .home-player .time-display-large { font-size:12px !important; }
+ .home-player .player-controls-bar { bottom:var(--transport-bottom) !important; }
+ .home-player .progress-bar-container { bottom:calc(var(--transport-bottom) + var(--transport-height) + 12px) !important; }
+ .home-player canvas#visualizer { inset:0 !important; height:100% !important; }
+}
