@@ -209,6 +209,7 @@ m-nav .logo img{width:140px;height:60px;object-fit:contain;filter:url(#logo-tran
 
 /* Frame the complete film on square tablets/foldables; reserve room for playback. */
 @media (max-aspect-ratio:3/2) {
+ .home-player .audio-player-hero { height:auto !important; min-height:0; }
  .home-player { --framed-video-height:min(56.25vw, max(120px, calc(100svh - var(--navigation-height,90px) - 260px))); }
  .home-player .hero-image { height:var(--framed-video-height) !important; aspect-ratio:auto; }
  .home-player .video-stage video { object-fit:contain; object-position:center; }
