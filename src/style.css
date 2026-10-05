@@ -328,3 +328,14 @@ m-audio-player .volume-slider::-moz-range-thumb {
  .home-player .controls-right { align-self:start; }
  .home-player { --fit-analyzer-height:clamp(24px, calc(var(--player-room) - 56.25vw - 172px), 150px); }
 }
+
+/* One coordinate space for all framed sizes; the baseline follows the seek bar. */
+@media (max-aspect-ratio:3/2) {
+ .home-player canvas#visualizer {
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  transform:none !important;
+ }
+}
